@@ -1,0 +1,71 @@
+- table:
+    name: filter
+    schema: public
+  object_relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+- table:
+    name: label
+    schema: public
+  object_relationships:
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+  array_relationships:
+    - name: tasks
+      using:
+        foreign_key_constraint_on:
+          column: label_id
+          table:
+            name: task
+            schema: public
+- table:
+    name: priority
+    schema: public
+  array_relationships:
+    - name: tasks
+      using:
+        foreign_key_constraint_on:
+          column: priority_id
+          table:
+            name: task
+            schema: public
+- table:
+    name: task
+    schema: public
+  object_relationships:
+    - name: label
+      using:
+        foreign_key_constraint_on: label_id
+    - name: priority
+      using:
+        foreign_key_constraint_on: priority_id
+    - name: user
+      using:
+        foreign_key_constraint_on: user_id
+- table:
+    name: user
+    schema: public
+  array_relationships:
+    - name: filters
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: filter
+            schema: public
+    - name: labels
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: label
+            schema: public
+    - name: tasks
+      using:
+        foreign_key_constraint_on:
+          column: user_id
+          table:
+            name: task
+            schema: public

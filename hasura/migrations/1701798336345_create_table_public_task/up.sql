@@ -1,0 +1,1 @@
+CREATE TABLE "public"."task" ("id" serial NOT NULL, "task_name" text NOT NULL, "due_date" timestamp NOT NULL, "description" text NOT NULL, "created_at" timestamp NOT NULL DEFAULT now(), "priority_id" integer, "label_id" integer, "user_id" integer, PRIMARY KEY ("id") );

@@ -1,0 +1,1 @@
+CREATE TABLE "public"."filter" ("id" serial NOT NULL, "filter_name" text NOT NULL, "query" text, "color" text NOT NULL, "user_id" integer NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON UPDATE cascade ON DELETE cascade);
