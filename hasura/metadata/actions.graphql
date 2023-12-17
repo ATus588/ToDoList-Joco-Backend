@@ -1,0 +1,24 @@
+type Mutation {
+  signin(
+    mail: String!
+    password: String!
+  ): SignInOutput
+}
+
+type Mutation {
+  signup(
+    mail: String!
+    password: String!
+    user_name: String!
+  ): SignInOutput
+}
+
+type SignInOutput {
+  token: String
+  refreshToken: String
+  message: String
+  statusCode: Int!
+  user_name: String
+  id: Int
+}
+
