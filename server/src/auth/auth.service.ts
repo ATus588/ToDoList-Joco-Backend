@@ -59,7 +59,7 @@ export class AuthService {
         if (insert.error) {
             return { statusCode: 500, message: "Hasura Internal error" }
         }
-        const tokens = await this.getTokens(insert.data.insert_user_one.id, input.mail);
+        const tokens = await this.getTokens(insert.data.insert_user_one.id, input.mail, input.user_name);
         const hashToken = await this.hashData(tokens.refreshToken);
         const updateToken = await this.hasuraService.fetchGraphQL(UPDATE_USER_REFRESH_TOKEN, {
             id: insert.data.insert_user_one.id,
@@ -68,7 +68,7 @@ export class AuthService {
         if (updateToken.error) {
             return { statusCode: 500, message: "Hasura Internal error" }
         }
-        return { statusCode: 200, token: tokens.token, refreshToken: tokens.refreshToken, id: insert.data.insert_user_one.id, user_name: insert.data.insert_user_one.user_name };
+        return { statusCode: 200, token: tokens.token, refreshToken: tokens.refreshToken, id: insert.data.insert_user_one.id, user_name: input.user_name };
     }
 
     async signIn(dto: SignInDto): Promise<Return> {
@@ -85,7 +85,7 @@ export class AuthService {
         if (!check) {
             return { statusCode: 401, message: "Wrong email or password" }
         }
-        const tokens = await this.getTokens(user.id, input.mail);
+        const tokens = await this.getTokens(user.id, input.mail, user.user_name);
         const hashToken = await this.hashData(tokens.refreshToken);
         const updateToken = await this.hasuraService.fetchGraphQL(UPDATE_USER_REFRESH_TOKEN, {
             id: user.id,
@@ -107,10 +107,10 @@ export class AuthService {
         return bcrypt.hash(data, 10)
     }
 
-    async getTokens(userId: number, mail: string): Promise<Tokens> {
+    async getTokens(userId: number, mail: string, user_name): Promise<Tokens> {
         const [tk, rtk] = await Promise.all([
-            this.jwtService.signAsync({ sub: userId, mail }, { expiresIn: 60 * 15, secret: 'tk-secret' }),
-            this.jwtService.signAsync({ sub: userId, mail }, { expiresIn: 60 * 60 * 24 * 7, secret: 'rtk-secret' })
+            this.jwtService.signAsync({ sub: userId, mail, user_name }, { expiresIn: 60 * 60 * 24 * 7, secret: 'tk-secret' }),
+            this.jwtService.signAsync({ sub: userId, mail, user_name }, { expiresIn: 60 * 60 * 24 * 7, secret: 'rtk-secret' })
         ])
         return { token: tk, refreshToken: rtk };
     }

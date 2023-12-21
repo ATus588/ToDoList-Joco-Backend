@@ -1,0 +1,1 @@
+CREATE TABLE "public"."task_label" ("id" serial NOT NULL, "label_id" integer NOT NULL, "task_id" integer NOT NULL, PRIMARY KEY ("id") , FOREIGN KEY ("label_id") REFERENCES "public"."label"("id") ON UPDATE cascade ON DELETE cascade, FOREIGN KEY ("task_id") REFERENCES "public"."task"("id") ON UPDATE cascade ON DELETE cascade);
