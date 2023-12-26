@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { SignInDto, SignUpDto } from './dto';
 import { HasuraService } from 'src/hasura/hasura.service';
 import * as bcrypt from 'bcrypt'
@@ -13,6 +13,7 @@ query MyQuery($mail: String!) {
       mail
       password
       user_name
+      image
     }
   }
 `
@@ -68,7 +69,7 @@ export class AuthService {
         if (updateToken.error) {
             return { statusCode: 500, message: "Hasura Internal error" }
         }
-        return { statusCode: 200, token: tokens.token, refreshToken: tokens.refreshToken, id: insert.data.insert_user_one.id, user_name: input.user_name };
+        return { statusCode: 200 };
     }
 
     async signIn(dto: SignInDto): Promise<Return> {
@@ -94,7 +95,7 @@ export class AuthService {
         if (updateToken.error) {
             return { statusCode: 500, message: "Hasura Internal error" }
         }
-        return { statusCode: 200, token: tokens.token, refreshToken: tokens.refreshToken, id: user.id, user_name: user.user_name };
+        return { statusCode: 200, token: tokens.token, refreshToken: tokens.refreshToken, id: user.id, user_name: user.user_name, avatar: user.image };
 
     }
 

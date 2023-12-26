@@ -13,6 +13,13 @@ type Mutation {
   ): SignInOutput
 }
 
+type Mutation {
+  updatePassword(
+    id: String!
+    password: String!
+  ): SignInOutput
+}
+
 type SignInOutput {
   token: String
   refreshToken: String
@@ -20,5 +27,6 @@ type SignInOutput {
   statusCode: Int!
   user_name: String
   id: Int
+  avatar: String
 }
 
